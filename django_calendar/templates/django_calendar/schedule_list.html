@@ -1,0 +1,10 @@
+{% extends 'django_calendar/base.html' %}
+{% block content %}
+    <div class="container">
+        <a href="javascript:void(0);" onclick="window.history.back();">戻る</a>
+        {% for schedule in schedule_list %}
+            {{ schedule.memo | linebreaks | urlize }}
+            <hr>
+        {% endfor %}
+    </div>
+{% endblock %}

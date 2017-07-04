@@ -1,0 +1,15 @@
+{% extends 'django_calendar/base.html' %}
+{% block content %}
+<div class="container">
+<form action="" method="POST">
+    {% for field in form %}
+    <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+    </div>
+    {% endfor %}
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">送信</button>
+</form>
+</div>
+{% endblock %}
