@@ -13,8 +13,8 @@ django-simple-calendar
 Requirement
 --------------
 
-:Python: 3.4以上
-:Django: 1.9以上
+:Python: 3.5以上
+:Django: 1.10以上
 
 
 Quick start
