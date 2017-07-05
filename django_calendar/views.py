@@ -1,10 +1,9 @@
 import datetime
-from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.views import generic
 from django.shortcuts import render
 
-from .calendarlib import Calendar, make_aware_date
+from .calendarlib import Calendar
 from .forms import ScheduleForm
 from .models import Schedule
 
@@ -19,9 +18,17 @@ class CalendarView(generic.TemplateView):
         year = self.kwargs.get('year')
         month = self.kwargs.get('month')
 
-        # 年と月を渡し、awareな日付を作成する。yearとmonthがNoneなら現在日付
-        aware_date = make_aware_date(year, month)
-        month_html_calendar = Calendar(aware_date).formatmonth()
+        # /アクセスの場合
+        if year is None and month is None:
+            date = datetime.datetime.now()
+
+        # yearとmonthの指定がある場合
+        elif year and month:
+            date = datetime.datetime(
+                year=int(year), month=int(month), day=1
+            )
+
+        month_html_calendar = Calendar(date).formatmonth()
         context = super().get_context_data(*args, **kwargs)
 
         # mark_safeでhtmlがエスケープされないようにする
@@ -43,7 +50,7 @@ class ScheduleCreateView(generic.CreateView):
         date = datetime.datetime(
             year=int(year), month=int(month), day=int(day))
         schedule = form.save(commit=False)
-        schedule.date = timezone.make_aware(date)
+        schedule.date = date
         schedule.save()
         return render(self.request, 'django_calendar/close.html')
 
@@ -57,8 +64,9 @@ class ScheduleListView(generic.ListView):
         month = self.kwargs.get('month')
         day = self.kwargs.get('day')
         date = datetime.datetime(
-            year=int(year), month=int(month), day=int(day))
+            year=int(year), month=int(month), day=int(day)
+        )
         queryset = Schedule.objects.filter(
-            date=timezone.make_aware(date)
+            date=date
         )
         return queryset
