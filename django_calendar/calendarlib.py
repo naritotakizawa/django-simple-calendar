@@ -1,7 +1,6 @@
 """カレンダーを作成するためのモジュール."""
 from calendar import month_name, monthrange, LocaleHTMLCalendar
 import datetime
-from django.utils import timezone
 from django.shortcuts import resolve_url
 from .models import Schedule
 
@@ -39,7 +38,7 @@ def create_day_html(year, month, day, css_class):
         year=year, month=month, day=day
     )
     all_count = Schedule.objects.filter(
-        date=timezone.make_aware(date)
+        date=date
     ).count()
     if all_count:
         schedule_link_and_num = SCHEDULE_LINK_AND_NUM.format(
@@ -99,20 +98,6 @@ def add_months(date, num):
     month = month % 12 + 1
     day = min(date.day, monthrange(year, month)[1])
     date = datetime.datetime(year=year, month=month, day=day)
-    return timezone.make_aware(date)
-
-
-def make_aware_date(year=None, month=None):
-    """awareなdatetimeオブジェクトを作成する.
-
-    年と月を受取り、awareなdatetimeオブジェクトを作成する yearとmonthがNoneの場合は、今日
-
-    """
-    if year is None and month is None:
-        date = timezone.now()
-    elif year and month:
-        naive_date = datetime.datetime(year=int(year), month=int(month), day=1)
-        date = timezone.make_aware(naive_date)
     return date
 
 
