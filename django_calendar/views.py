@@ -1,4 +1,5 @@
 import datetime
+from collections import defaultdict
 from django.utils.safestring import mark_safe
 from django.views import generic
 from django.shortcuts import render
@@ -28,11 +29,19 @@ class CalendarView(generic.TemplateView):
                 year=int(year), month=int(month), day=1
             )
 
-        month_html_calendar = Calendar(date).formatmonth()
+        # {1:3, 31:5}のような、日付:スケジュール件数な辞書を作る
+        schedule_counter = defaultdict(int)
+        queryset = Schedule.objects.filter(
+            date__year=date.year, date__month=date.month
+        )
+        for schedule in queryset:
+            schedule_counter[schedule.date.day] += 1
+
+        month_calendar_html = Calendar(date, schedule_counter).formatmonth()
         context = super().get_context_data(*args, **kwargs)
 
         # mark_safeでhtmlがエスケープされないようにする
-        context['calendar'] = mark_safe(month_html_calendar)
+        context['calendar'] = mark_safe(month_calendar_html)
         return context
 
 
