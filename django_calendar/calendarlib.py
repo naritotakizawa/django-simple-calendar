@@ -2,7 +2,6 @@
 from calendar import month_name, monthrange, LocaleHTMLCalendar
 import datetime
 from django.shortcuts import resolve_url
-from .models import Schedule
 
 DAY_HTML = """\
 <td class="{css_class}">
@@ -21,7 +20,7 @@ SCHEDULE_LINK_AND_NUM = """\
 """
 
 
-def create_day_html(year, month, day, css_class):
+def create_day_html(year, month, day, css_class, counter):
     """カレンダーの日付部分のhtmlを作成する.
 
     引数:
@@ -29,24 +28,20 @@ def create_day_html(year, month, day, css_class):
         month: 月
         day: 日
         css_class: 日付部分のhtmlに与えたいcssのクラス
+        counter: {日付:スケジュール件数} な辞書
 
     返り値:
         日付部分のhtml。具体的にはDAY_HTMLに変数を埋め込んだ文字列
 
     """
-    date = datetime.datetime(
-        year=year, month=month, day=day
-    )
-    all_count = Schedule.objects.filter(
-        date=date
-    ).count()
-    if all_count:
+    day_schedule_count = counter.get(day)
+    if day_schedule_count:
         schedule_link_and_num = SCHEDULE_LINK_AND_NUM.format(
             schedule_link=resolve_url(
                 'django_calendar:schedule_list',
                 year=year, month=month, day=day
             ),
-            schedule_num=all_count
+            schedule_num=day_schedule_count
         )
     else:
         schedule_link_and_num = ''
@@ -102,10 +97,12 @@ def add_months(date, num):
 
 
 class Calendar(LocaleHTMLCalendar):
+    """Bootstrap4対応したカスタムカレンダー."""
 
-    def __init__(self, date, firstweekday=0, locale=None):
+    def __init__(self, date, counter, firstweekday=0, locale=None):
         super().__init__(firstweekday, locale)
         self.date = date
+        self.counter = counter
 
     def formatday(self, day, weekday):
         """tableタグの日付部分のhtmlを作成する<td>...</td>."""
@@ -115,7 +112,7 @@ class Calendar(LocaleHTMLCalendar):
         else:
             day_html = create_day_html(
                 self.date.year, self.date.month, day,
-                self.cssclasses[weekday]
+                self.cssclasses[weekday], self.counter
             )
             return day_html
 
