@@ -137,6 +137,46 @@ class TestWithTimeCalendar(TestCase):
         self.assertEqual(WithTimeSchedule.objects.count(), 4)
         self.assertContains(response, 'window.close();')
 
+    def test_schedule_create_post_error1(self):
+        """スケジュール作成ページのテスト(終了時間エラー1)"""
+
+        response = self.client.post(
+            reverse(
+                'django_calendar:withtime_schedule_create',
+                kwargs={'year': '2010', 'month': '7', 'day': '10',}
+            ),
+            {
+                'memo': 'add',
+                'start_time': '15:00',
+                'end_time': '14:00',  # 終了時間が開始時間よりも短い
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(WithTimeSchedule.objects.count(), 3)
+        self.assertContains(
+            response, '終了時間は、開始時間よりも後にしてください',
+        )
+
+    def test_schedule_create_post_error2(self):
+        """スケジュール作成ページのテスト(終了時間エラー2)"""
+
+        response = self.client.post(
+            reverse(
+                'django_calendar:withtime_schedule_create',
+                kwargs={'year': '2010', 'month': '7', 'day': '10',}
+            ),
+            {
+                'memo': 'add',
+                'start_time': '15:00',
+                'end_time': '15:00',  # 終了時間が開始時間と同じ
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(WithTimeSchedule.objects.count(), 3)
+        self.assertContains(
+            response, '終了時間は、開始時間よりも後にしてください',
+        )
+
     def test_schedule_list_get(self):
         """スケジュール一覧ページのテスト"""
         response = self.client.get(reverse(
