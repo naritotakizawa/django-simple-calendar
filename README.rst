@@ -39,4 +39,11 @@ Quick start
 
 4. python manage.py migrate　でモデルを追加する.
 
-5. python manage.py runserver で動かし、/calendarにアクセス
+5. python manage.py runserver で動かす
+
+6. /にアクセルするとシンプルなカレンダーページが、/withtime にアクセスすると時間付きのカレンダーページにアクセスできます。
+
+7. カレンダーを他のアプリに組み込む場合は、以下のようにiframeを利用すると単純です::
+
+    <iframe width="100%" height="500px" src="{% url 'django_calendar:calendar' %}"></iframe>
+    <iframe width="100%" height="500px" src="{% url 'django_calendar:withtime_calendar' %}"></iframe>

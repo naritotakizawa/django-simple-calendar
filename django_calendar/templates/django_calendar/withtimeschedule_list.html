@@ -1,0 +1,31 @@
+{% extends 'django_calendar/base.html' %}
+{% block content %}
+<style>
+    .minute-wrapper {
+        border: 1px solid #eceeef;
+    }
+ 
+    .hour-name {
+        padding: 5px;
+        text-align: right;
+        border: 1px solid #eceeef;
+    }
+ 
+    .just-hour {
+        border-top: 1px solid #eceeef;
+    }
+</style>
+    <div class="container">
+        <a href="javascript:void(0);" onclick="window.history.back();">戻る</a>
+        <hr>
+        {{ time_schedule }}
+    </div>
+{% endblock %}
+
+{% block extrajs %}
+<script>
+    $(function() {
+        $('[data-toggle="tooltip"]').tooltip('show');
+    });
+</script>
+{% endblock %}
