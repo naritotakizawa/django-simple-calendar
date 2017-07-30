@@ -8,6 +8,8 @@ urlpatterns = [
     url(r'^$', views.CalendarView.as_view(), name='calendar'),
     url(r'^(?P<year>[0-9]+)/(?P<month>[0-9]+)/$',
         views.CalendarView.as_view(), name='calendar'),
+    url(r'^week/(?P<year>[0-9]+)/(?P<month>[0-9]+)/(?P<week>[0-9]+)/$',
+        views.WeekCalendarView.as_view(), name='week_calendar'),
     url(
         (
             r'^schedule_create/'
@@ -27,7 +29,15 @@ urlpatterns = [
     url(r'^withtime/$',
         views.WithTimeCalendarView.as_view(), name='withtime_calendar'),
     url(r'^withtime/(?P<year>[0-9]+)/(?P<month>[0-9]+)/$',
-        views.WithTimeCalendarView.as_view(), name='withtime_calendar'),
+        views.WithTimeCalendarView.as_view(),
+        name='withtime_calendar'),
+    url(
+        (
+            r'^withtime/week/'
+            r'(?P<year>[0-9]+)/(?P<month>[0-9]+)/(?P<week>[0-9]+)/$'
+        ),
+        views.WithTimeWeekCalendarView.as_view(),
+        name='withtime_week_calendar'),
     url(
         (
             r'^withtime/schedule_create/'

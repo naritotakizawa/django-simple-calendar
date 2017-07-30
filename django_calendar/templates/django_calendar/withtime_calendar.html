@@ -6,7 +6,7 @@
 }
 </style>
     <div class="container">
-        <p><a href="{% url 'django_calendar:week_calendar' date.year date.month 1 %}">週間カレンダーへ</a></p>
+        <p><a href="{% url 'django_calendar:withtime_week_calendar' date.year date.month 1 %}">週間カレンダーへ</a></p>
         {{ calendar }}
     </div>
     

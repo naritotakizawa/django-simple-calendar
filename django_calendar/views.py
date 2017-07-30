@@ -52,6 +52,31 @@ class CalendarView(generic.TemplateView):
 
         # mark_safeでhtmlがエスケープされないようにする
         context['calendar'] = mark_safe(month_calendar_html)
+        context['date'] = date
+        return context
+
+
+class WeekCalendarView(generic.TemplateView):
+    """週間カレンダーのView."""
+
+    template_name = 'django_calendar/week_calendar.html'
+
+    def get_calendar(self, *args, **kwagrs):
+        return SimpleCalendarBS4(*args, **kwagrs)
+
+    def get_context_data(self, *args, **kwargs):
+        week = self.kwargs.get('week')
+        year = self.kwargs.get('year')
+        month = self.kwargs.get('month')
+        date = datetime.datetime(
+            year=int(year), month=int(month), day=1
+        )
+        calendar = self.get_calendar(date)
+        html = calendar.formatweek_table(int(week))
+
+        context = super().get_context_data(*args, **kwargs)
+        context['calendar'] = mark_safe(html)
+        context['date'] = date
         return context
 
 
@@ -94,7 +119,21 @@ class ScheduleListView(generic.ListView):
 
 
 class WithTimeCalendarView(CalendarView):
-    """時間付きカレンダーを表示するビュー."""
+    """時間付き月間カレンダーを表示するビュー."""
+
+    template_name = 'django_calendar/withtime_calendar.html'
+
+    def get_calendar(self, *args, **kwagrs):
+        return WithTimeCalendarBS4(*args, **kwagrs)
+
+    def get_model(self):
+        return WithTimeSchedule
+
+
+class WithTimeWeekCalendarView(WeekCalendarView):
+    """時間付き週間カレンダーを表示するビュー."""
+
+    template_name = 'django_calendar/withtime_week_calendar.html'
 
     def get_calendar(self, *args, **kwagrs):
         return WithTimeCalendarBS4(*args, **kwagrs)

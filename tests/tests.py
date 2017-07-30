@@ -32,6 +32,27 @@ class TestCalendar(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, '+3')
 
+    def test_weekcalendar_get(self):
+        """週間カレンダーページのテスト."""
+        kwargs = {'year': '2010', 'month': '7', 'week': '1'}
+        response = self.client.get(
+            reverse('django_calendar:week_calendar', kwargs=kwargs)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, '★1')
+        self.assertNotContains(response, '★2')
+        self.assertNotContains(response, '★3')
+
+    def test_weekcalendar_get2(self):
+        """スケジュールが追加された週のカレンダーページテスト."""
+        kwargs = {'year': '2010', 'month': '7', 'week': '2'}
+        response = self.client.get(
+            reverse('django_calendar:week_calendar', kwargs=kwargs)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '★1')
+        self.assertContains(response, '★2')
+        self.assertContains(response, '★3')
 
     def test_schedule_create_get(self):
         """スケジュール作成ページのテスト"""
@@ -109,6 +130,27 @@ class TestWithTimeCalendar(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, '+3')
 
+    def test_weekcalendar_get(self):
+        """週間カレンダーページのテスト."""
+        kwargs = {'year': '2010', 'month': '7', 'week': '1'}
+        response = self.client.get(
+            reverse('django_calendar:withtime_week_calendar', kwargs=kwargs)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, '7:00:00〜07:30:00<br>1')
+        self.assertNotContains(response, '8:00:00〜10:00:00<br>2')
+        self.assertNotContains(response, '10:00:00〜12:30:00<br>3')
+
+    def test_weekcalendar_get2(self):
+        """スケジュールが追加された週のカレンダーページテスト."""
+        kwargs = {'year': '2010', 'month': '7', 'week': '2'}
+        response = self.client.get(
+            reverse('django_calendar:withtime_week_calendar', kwargs=kwargs)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '7:00:00〜07:30:00<br>1')
+        self.assertContains(response, '8:00:00〜10:00:00<br>2')
+        self.assertContains(response, '10:00:00〜12:30:00<br>3')
 
     def test_schedule_create_get(self):
         """スケジュール作成ページのテスト"""
@@ -188,7 +230,6 @@ class TestWithTimeCalendar(TestCase):
             response.context['withtimeschedule_list'].order_by('pk'),
             ['<WithTimeSchedule: 1>', '<WithTimeSchedule: 2>', '<WithTimeSchedule: 3>']
         )
-        self.assertContains(
-            response,
-            '07:00:00〜07:30:00<br>1'
-        )
+        self.assertContains(response, '7:00:00〜07:30:00<br>1')
+        self.assertContains(response, '8:00:00〜10:00:00<br>2')
+        self.assertContains(response, '10:00:00〜12:30:00<br>3')

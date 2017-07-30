@@ -1,0 +1,28 @@
+{% extends 'django_calendar/base.html' %}
+{% block content %}
+<style>
+    .week-table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 1rem;
+        table-layout: fixed;
+    }
+ 
+    .week-table td {
+        border: 1px solid #eceeef;
+        vertical-align: top;
+    }
+    
+    .week-table th {
+        border: 1px solid #eceeef;
+        padding: .75rem;
+        vertical-align: top;
+    }
+ 
+</style>
+    <div class="container">
+        <p><a href="{% url 'django_calendar:withtime_calendar' date.year date.month %}">月間カレンダーへ</a></p>
+        {{ calendar }}
+    </div>
+    
+{% endblock %}
