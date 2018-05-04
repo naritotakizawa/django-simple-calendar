@@ -1,0 +1,44 @@
+{% extends 'sampleapp/base.html' %}
+{% block content %}
+
+<a href="{% url 'sampleapp:week_with_schedule' week.previous.year week.previous.month  week.previous.day %}">前週</a>
+{{ week.first | date:"Y年m月d日" }}〜{{ week.last | date:"Y年m月d日" }}
+<a href="{% url 'sampleapp:week_with_schedule' week.next.year week.next.month  week.next.day %}">次週</a>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      {% for w in week.week_names %}
+        <th>{{ w }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        {% for day in week.days %}
+          {% if week.now == day %}
+            <td class="table-success">
+          {% else %}
+            <td>
+          {% endif %}
+          {% if week.first.month != day.month %}
+            {{ day | date:"m/d" }}
+          {% else %}
+            {{ day.day }}
+          {% endif %}
+          </td>
+        {% endfor %}
+      </tr>
+      <tr>
+        {% for day_schedule_list in week.schedule_list %}
+          <td>
+            {% for s in day_schedule_list %}
+                {{ s.start_time }} - {{ s.end_time }}<br>
+                {{ s.summary }}<br>
+                {{ s.description | linebreaks }}
+            {% endfor %}
+          </td>
+        {% endfor %}
+      </tr>
+  </tbody>
+</table>
+{% endblock %}
