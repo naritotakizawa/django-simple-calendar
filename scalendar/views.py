@@ -130,3 +130,32 @@ class WeekWithScheduleMixin(WeekCalendarMixin):
         schedules = self.get_week_schedules(calendar_data['days'])
         calendar_data['schedule_list'] = schedules
         return calendar_data
+
+
+class MonthWithScheduleMixin(MonthCalendarMixin):
+    """スケジュール付きの、月間カレンダーを提供するMixin"""
+    model = Schedule
+    date_field = 'date'
+    order_field = 'start_time'
+
+    def get_month_schedules(self, days):
+        """(日付, その日のスケジュール)なリストを返す"""
+        day_with_schedules = []
+        for week in days:
+            week_list = []
+            for day in week:
+                lookup = {self.date_field: day}
+                queryset = self.model.objects.filter(**lookup)
+                if self.order_field:
+                    queryset = queryset.order_by(self.order_field)
+                week_list.append(
+                    (day, queryset)
+                )
+            day_with_schedules.append(week_list)
+        return day_with_schedules
+
+    def get_month_calendar(self):
+        calendar_data = super().get_month_calendar()
+        day_with_schedules = self.get_month_schedules(calendar_data['days'])
+        calendar_data['days'] = day_with_schedules
+        return calendar_data

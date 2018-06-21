@@ -2,7 +2,10 @@ import datetime
 from django.shortcuts import redirect
 from django.views import generic
 from scalendar.forms import BS4ScheduleForm
-from scalendar.views import MonthCalendarMixin, WeekCalendarMixin, WeekWithScheduleMixin
+from scalendar.views import (
+    MonthCalendarMixin, WeekCalendarMixin,
+    WeekWithScheduleMixin, MonthWithScheduleMixin
+)
 
 
 class MonthCalendar(MonthCalendarMixin, generic.TemplateView):
@@ -32,6 +35,16 @@ class WeekWithScheduleCalendar(WeekWithScheduleMixin, generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['week'] = self.get_week_calendar()
+        return context
+
+
+class MonthWithScheduleCalendar(MonthWithScheduleMixin, generic.TemplateView):
+    """スケジュール付きの月間カレンダーを表示するビュー"""
+    template_name = 'sampleapp/month_with_schedule.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['month'] = self.get_month_calendar()
         return context
 
 

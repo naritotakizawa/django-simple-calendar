@@ -1,0 +1,53 @@
+{% extends 'sampleapp/base.html' %}
+{% block content %}
+<style>
+    table {
+        table-layout: fixed;
+    }
+
+    td > div {
+      height: 100px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+</style>
+<a href="{% url 'sampleapp:month_with_schedule' month.previous.year month.previous.month %}">前月</a>
+{{ month.current | date:"Y年m月" }}
+<a href="{% url 'sampleapp:month_with_schedule' month.next.year month.next.month %}">次月</a>
+<table class="table">
+  <thead>
+    <tr>
+      {% for w in month.week_names %}
+        <th>{{ w }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for week in month.days %}
+      <tr>
+        {% for day, schedules in week %}
+          {% if month.now == day %}
+            <td class="table-success">
+          {% else %}
+            <td>
+          {% endif %}
+
+          <div>
+            {% if month.current.month != day.month %}
+              {{ day | date:"m/d" }}
+            {% else %}
+              {{ day.day }}
+            {% endif %}
+
+            {% for schedule in schedules %}
+                <p>{{ schedule.summary }}</p>
+            {% endfor %}
+          </div>
+          </td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
