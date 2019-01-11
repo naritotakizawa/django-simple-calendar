@@ -1,0 +1,31 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+    <a href="{% url 'app:month' month_previous.year month_previous.month %}">前月</a>
+    {{ month_current | date:"Y年m月" }}
+    <a href="{% url 'app:month' month_next.year month_next.month %}">次月</a>
+
+    <table class="table">
+        <tbody>
+        {% for week in month_days %}
+            <tr>
+                {% for day in week %}
+                    {% if now == day %}
+                        <td class="table-success">
+                            {% else %}
+                        <td>
+                    {% endif %}
+
+                {% if month_current.month != day.month %}
+                    {{ day | date:"m/d" }}
+                {% else %}
+                    {{ day.day }}
+                {% endif %}
+
+                </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

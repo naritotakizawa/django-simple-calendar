@@ -4,7 +4,7 @@ django-simple-calendar
 
 月間カレンダー、週間カレンダーなどの機能を提供します。
 
-`解説ブログ <https://torina.top/detail/469>`_
+`解説ブログ <https://narito.ninja/detail/11/>`_
 
 確認した環境
 ----------
@@ -25,4 +25,3 @@ django-simple-calendar
     python manage.py migrate
     python manage.py runserver
 
-sampleappアプリケーションはサンプルです。月間カレンダー、週間カレンダー、スケジュール付き週間カレンダー、そして月間、週間、スケジュール登録のついたビューがあります。いずれ、pipでインストールできるようにパッケージングするかもしれません。私のモチベーションと興味が、再燃したら。

@@ -1,0 +1,34 @@
+{% extends 'app/base.html' %}
+{% block content %}
+
+    <a href="{% url 'app:week' week_previous.year week_previous.month  week_previous.day %}">前週</a>
+    {{ week_first | date:"Y年m月d日" }}〜{{ week_last | date:"Y年m月d日" }}
+    <a href="{% url 'app:week' week_next.year week_next.month  week_next.day %}">次週</a>
+
+    <table class="table">
+        <thead>
+        <tr>
+            {% for w in week_names %}
+                <th>{{ w }}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            {% for day in week_days %}
+                {% if now == day %}
+                    <td class="table-success">
+                        {% else %}
+                    <td>
+                {% endif %}
+            {% if week_first.month != day.month %}
+                {{ day | date:"m/d" }}
+            {% else %}
+                {{ day.day }}
+            {% endif %}
+            </td>
+            {% endfor %}
+        </tr>
+        </tbody>
+    </table>
+{% endblock %}

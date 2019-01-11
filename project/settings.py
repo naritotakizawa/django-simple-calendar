@@ -37,8 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'scalendar',  # mixinとかいれる、ライブラリ的なポジ
-    'sampleapp',  # ↑を実際につかうサンプルアプリ
+    'app',  # カレンダーアプリ
 ]
 
 MIDDLEWARE = [

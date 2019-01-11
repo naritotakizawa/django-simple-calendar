@@ -1,0 +1,29 @@
+<a href="{% url 'app:mycalendar' month_previous.year month_previous.month month_previous.day %}">前月</a>
+{{ month_current | date:"Y年m月" }}
+<a href="{% url 'app:mycalendar' month_next.year month_next.month month_next.day %}">次月</a>
+
+<table class="table" style="table-layout: fixed;">
+    <thead>
+    <tr>
+        {% for w in week_names %}
+            <th>{{ w }}</th>
+        {% endfor %}
+    </tr>
+    </thead
+    <tbody>
+    {% for week in month_days %}
+        <tr>
+            {% for day in week %}
+                {% if now == day %}
+                    <td class="table-success">
+                {% else %}
+                    <td>
+                {% endif %}
+
+                <a href="{% url 'app:mycalendar' day.year day.month day.day %}">{{ day.day }}</a>
+                </td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
