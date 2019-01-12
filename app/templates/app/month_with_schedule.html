@@ -13,8 +13,9 @@
 
     </style>
     <a href="{% url 'app:month_with_schedule' month_previous.year month_previous.month %}">前月</a>
-    {{ month.current | date:"Y年m月" }}
+    {{ month_current | date:"Y年m月" }}
     <a href="{% url 'app:month_with_schedule' month_next.year month_next.month %}">次月</a>
+
     <table class="table">
         <thead>
         <tr>
