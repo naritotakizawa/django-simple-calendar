@@ -13,6 +13,35 @@
 </head>
 <body>
 
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'app:month' %}">月間カレンダー</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'app:week' %}">週間カレンダー</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'app:month_with_schedule' %}">スケジュール付き月間カレンダー</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'app:week_with_schedule' %}">スケジュール付き週間カレンダー</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'app:mycalendar' %}">登録機能付き月間・週間カレンダー</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'app:month_with_forms' %}">一括登録付き月間カレンダー</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
 <div class="container mt-3">
     {% block content %}{% endblock %}
 </div>
