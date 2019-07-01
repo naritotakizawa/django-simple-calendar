@@ -10,7 +10,7 @@ class BaseCalendarMixin:
     first_weekday = 0  # 0は月曜から、1は火曜から。6なら日曜日からになります。お望みなら、継承したビューで指定してください。
     week_names = ['月', '火', '水', '木', '金', '土', '日']  # これは、月曜日から書くことを想定します。['Mon', 'Tue'...
 
-    def setup(self):
+    def setup_calendar(self):
         """内部カレンダーの設定処理
 
         calendar.Calendarクラスの機能を利用するため、インスタンス化します。
@@ -60,7 +60,7 @@ class MonthCalendarMixin(BaseCalendarMixin):
 
     def get_month_calendar(self):
         """月間カレンダー情報の入った辞書を返す"""
-        self.setup()
+        self.setup_calendar()
         current_month = self.get_current_month()
         calendar_data = {
             'now': datetime.date.today(),
@@ -92,7 +92,7 @@ class WeekCalendarMixin(BaseCalendarMixin):
 
     def get_week_calendar(self):
         """週間カレンダー情報の入った辞書を返す"""
-        self.setup()
+        self.setup_calendar()
         days = self.get_week_days()
         first = days[0]
         last = days[-1]
